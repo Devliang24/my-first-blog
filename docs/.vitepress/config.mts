@@ -4,10 +4,6 @@ import { defineConfig } from 'vitepress'
 import { blogTheme } from './blog-theme'
 
 
-export default {
-  ignoreDeadLinks: true
-}
-
 // 如果使用 GitHub/Gitee Pages 等公共平台部署
 // 通常需要修改 base 路径，通常为“/仓库名/”
 // 如果项目名已经为 name.github.io 域名，则不需要修改！
@@ -21,6 +17,8 @@ export default defineConfig({
   // 继承博客主题(@sugarat/theme)
   extends: blogTheme,
   base,
+  // 忽略死链
+  ignoreDeadLinks: true,
   lang: 'zh-cn',
   title: '@sugarat/theme',
   description: '粥里有勺糖的博客主题，基于 vitepress 实现',
