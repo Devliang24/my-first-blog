@@ -1,4 +1,13 @@
 
+# 项目结构
+```
+[root@master api_demo]# ll
+-rw-r--r--. 1 root root   536 9月  14 16:46 Dockerfile
+-rw-r--r--. 1 root root 13780 9月  14 16:39 main.py
+-rw-r--r--. 1 root root    17 9月  14 16:32 requirements.txt
+```
+
+
 # requirements.txt 文件内容
 ```
 fastapi
@@ -419,4 +428,27 @@ async def delete_order(order_id: str, authorization: str = Header(...)):
 #if __name__ == "__main__":
 #    # 运行 FastAPI 应用
 #    uvicorn.run(app, host="0.0.0.0", port=8000)
+```
+
+# 构建镜像
+```
+docker build -t myapi_demo:v2 .
+```
+
+# 运行镜像
+```
+docker run --name myapi_demo3 -p 8003:8000 -d myapi_demo:v2
+```
+# 验证服务是否正常
+```
+curl -X 'POST' \
+  'http://192.168.121.10:8003/login' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "username": "zhangsan",
+  "password": "123456"
+}'
+
+![alt text](image-1.png)
 ```
