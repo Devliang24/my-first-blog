@@ -1,3 +1,36 @@
+
+# requirements.txt 文件内容
+```
+fastapi
+uvicorn
+```
+
+# Dcokerfile 文件内容
+```
+# 使用官方的 Python 镜像作为基础镜像
+FROM python:3.10.13
+
+# 设置工作目录
+WORKDIR /app
+
+# 复制当前目录下的所有文件到工作目录
+COPY . /app
+
+# 设置清华镜像源
+RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+
+# 安装依赖
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 暴露 FastAPI 默认端口
+EXPOSE 8000
+
+# 启动 FastAPI 
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+```
+
+# 源代码 main.py
 ```
 from fastapi import FastAPI, HTTPException, Header, status
 from pydantic import BaseModel
@@ -383,7 +416,7 @@ async def delete_order(order_id: str, authorization: str = Header(...)):
     deleted_order = mock_orders_db.pop(order_id)
     return response({"message": "订单已删除", "order": deleted_order})
 
-if __name__ == "__main__":
-    # 运行 FastAPI 应用
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+#if __name__ == "__main__":
+#    # 运行 FastAPI 应用
+#    uvicorn.run(app, host="0.0.0.0", port=8000)
 ```
