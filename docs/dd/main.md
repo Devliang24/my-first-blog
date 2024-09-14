@@ -454,5 +454,5 @@ curl -X 'POST' \
   "password": "123456"
 }'
 
-![alt text](image-1.png)
 ```
+![alt text](image-2.png)
