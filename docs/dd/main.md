@@ -1,10 +1,14 @@
+# 在 CentOS 7 上部署 FastAPI 应用的 Docker 镜像
 
 # 项目结构
 ```
-[root@master api_demo]# ll
--rw-r--r--. 1 root root   536 9月  14 16:46 Dockerfile
--rw-r--r--. 1 root root 13780 9月  14 16:39 main.py
--rw-r--r--. 1 root root    17 9月  14 16:32 requirements.txt
+[root@master api_demo_1]# tree
+.
+├── Dockerfile
+├── main.py
+└── requirements.txt
+
+0 directories, 3 files
 ```
 
 
