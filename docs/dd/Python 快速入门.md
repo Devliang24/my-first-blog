@@ -135,7 +135,7 @@ print("姓名:", person["name"])  # John
 print("姓名:", person.get('name'))  # John
 
 # 方法一 获取性别
-print("性别:", person["sex"])  # 会报错，因为 sex 健不存在
+print("性别:", person["sex"])  # 会报错，因为 sex 键不存在
 # 方法二 获取性别
 print("性别:", person.get('sex'))  # John
 
