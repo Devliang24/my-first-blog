@@ -104,8 +104,6 @@ print("合法变量名的值:", my_variable)   # 输出: 合法变量名的值: 
 print("my_variable的类型:", type(my_variable)) # 输出: my_variable的类型: <class 'int'>
 ```
 
-
-
 # 2.数据类型
 
 在 Python 中，数值类型、字符串、列表、元组、字典和集合是基本的数据类型。下面是针对每个类型的示例和操作。
@@ -409,7 +407,7 @@ for i in range(10):
 
 通过这些例子，你可以学习如何使用 `if`、`elif`、`else` 进行条件判断，以及如何使用 `for` 和 `while` 循环遍历序列和控制循环流。 `break` 和 `continue` 语句可以帮助你更精细地控制循环执行的方式。
 
-## 5.综合示例
+## 5. 综合示例
 
 ```
 # 综合示例
@@ -443,9 +441,21 @@ def add_numbers(a, b):
 # 调用函数并打印返回值
 result = add_numbers(3, 5)
 print(f"The result is: {result}")
+
+# 返回多个值
+def get_min_max(numbers):
+    """返回列表中的最小值和最大值"""
+    return min(numbers), max(numbers)
+
+min_val, max_val = get_min_max([1, 5, 3, 9, 2])
+print(f"最小值: {min_val}, 最大值: {max_val}")  # 输出: 最小值: 1, 最大值: 9
 ```
 
-在这个例子中，定义了一个函数 `add_numbers`，它接受两个参数 `a` 和 `b`，返回它们的和。
+在这个例子中
+
+- 函数 `add_numbers`，它接受两个参数 `a` 和 `b`，返回它们的和。
+
+- 函数 `get_min_max`，它接受一个参数`numbers`，该参数为一个列表，返回两个值。
 
 ## 2. **默认参数**
 
@@ -478,7 +488,7 @@ print(sum_numbers(1, 2, 3))  # 输出 6
 print(sum_numbers(4, 5, 6, 7, 8))  # 输出 30
 ```
 
-`*args` 允许你传递任意数量的位置参数，并将其作为元组传入函数。它在函数内部作为一个元组使用。
+`*args` 允许你传递任意数量的位置参数，并将其作为元组传入函数。
 
 ## 4. **可变参数 `**kwargs`**
 
@@ -492,11 +502,11 @@ def print_info(**kwargs):
 print_info(name="Alice", age=30, city="New York")
 ```
 
-`**kwargs` 允许你传递任意数量的关键字参数，并将其作为字典传入函数。它们在函数内部被作为字典处理。
+`**kwargs` 允许你传递任意数量的关键字参数，并将其作为字典传入函数。
 
 ## 5. 匿名函数（lambda）
 
-`lambda` 表达式用于创建匿名函数，通常用于需要一个简单函数的地方。
+`lambda` 表达式用于创建匿名函数，,可以有任意数量的参数，但只能有一个表达式
 
 ```python
 # 使用 lambda 表达式定义一个简单的匿名函数
@@ -509,89 +519,136 @@ print(square(5))  # 输出: 10
 numbers = [1, 2, 3, 4, 5]
 doubled_numbers = list(map(lambda x: x * 2, numbers))
 print(doubled_numbers)  # 输出: [2, 4, 6, 8, 10]
+
+# 在排序中使用lambda
+fruits = ['apple', 'banana', 'cherry', 'date']
+sorted_fruits = sorted(fruits, key=lambda x: len(x))
+print(sorted_fruits)  # 输出: ['date', 'apple', 'banana', 'cherry']
 ```
 
 解释： 
 
 - `lambda` 表达式是快速定义小函数的方式，适用于简单的运算逻辑。
-- 在这里，我们通过 `lambda` 创建一个匿名函数，并使用 `map` 函数对列表进行处理。
+- 在这里，我们通过 `lambda` 创建一个匿名函数，并使用 `map` 函数对列表进行处理，比如作为`list()`，`sorted()`, `map()`, `filter()`等函数的参数。
 
 ## 6. 装饰器（decorator）
 
-装饰器是用于修改函数行为的函数。它们通常用于在不改变原函数代码的情况下，添加额外的功能。
+装饰器是一个可调用对象，它接受一个函数作为输入，并返回另一个函数。装饰器通常用于在不修改原函数代码的情况下,增加额外的功能。
+
+简单装饰器
 
 ```python
-# 定义一个简单的装饰器函数
-def decorator(func):
-    def wrapper():
-        print("Function is being called")
-        func()
-        print("Function has been called")
-    return wrapper
-
-# 使用装饰器修饰函数
-@decorator
-def say_hello():
-    print("Hello!")
-
-# 调用被装饰的函数
-say_hello()
-
-# 输出:
-# Function is being called
-# Hello!
-# Function has been called
-```
-
-解释：  
-
-- 装饰器通过在函数前面加上 `@decorator_name` 来应用，它可以在函数调用前后添加额外的逻辑。
-- 在此例子中，`say_hello` 被装饰器修改，输出了额外的提示信息。
-
-## 7. 综合示例
-
-```python
-# 定义装饰器，打印函数执行时间
 import time
 
-def timing_decorator(func):
+def timer(func):
+    """一个计时装饰器"""
     def wrapper(*args, **kwargs):
         start_time = time.time()
         result = func(*args, **kwargs)
         end_time = time.time()
-        print(f"Function {func.__name__} executed in {end_time - start_time:.4f} seconds")
+        print(f"函数 {func.__name__} 运行时间: {end_time - start_time:.5f} 秒")
         return result
     return wrapper
 
-# 定义一个包含默认参数、*args 和 **kwargs 的函数
-@timing_decorator
-def process_data(data, multiplier=1, *args, **kwargs):
-    time.sleep(1)  # 模拟处理耗时
-    print(f"data: {data}")
-    print(f"multiplier: {multiplier}")
-    print("args:", ', '.join(args))
-    for key, value in kwargs.items():
-        print(f"{key}: {value}")
-    return [x * multiplier for x in data]
+@timer
+def slow_function():
+    """一个耗时的函数"""
+    time.sleep(2)
+    print("函数执行完毕")
 
-# 调用函数并传递不同类型的参数
-result = process_data([1, 2, 3], 4, '5', '6', city="New York", job="Engineer")
-print(result)
-
+slow_function()
 # 输出:
-# data: [1, 2, 3]
-# multiplier: 4
-# args: 5, 6
-# city: New York
-# job: Engineer
-# Function process_data executed in 1.0127 seconds
-# [4, 8, 12]
+# 函数执行完毕
+# 函数 slow_function 运行时间: 2.00310 秒
 ```
 
-**解释：**  
+解释：  
 
-- `timing_decorator` 装饰器记录了函数执行所花的时间。
-- `process_data` 函数接收`data` 是必需参数；默认参数 `multiplier`、可变参数 `*args` 和关键字参数 `**kwargs`，并处理数据列表。
+- 装饰器通过在函数前面加上 `@timer` 来应用，它可以在函数调用前后添加额外的逻辑。
+- 在此例子中，`slow_function` 被装饰器修改，输出了额外的提示信息。
+
+带参数的装饰器
+
+```
+def repeat(times):
+    """一个可以接收参数的装饰器"""
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            for _ in range(times):
+                result = func(*args, **kwargs)
+            return result
+        return wrapper
+    return decorator
+
+@repeat(times=3)
+def greet(name):
+    print(f"你好, {name}!")
+
+greet("小明")
+# 输出:
+# 你好, 小明!
+# 你好, 小明!
+# 你好, 小明!
+```
+
+## 7. 综合示例
+
+```python
+import time
+
+def timer(func):
+    """计时装饰器"""
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        print(f"函数 {func.__name__} 运行时间: {end_time - start_time:.5f} 秒")
+        return result
+    return wrapper
+
+@timer
+def process_data(data, operation=lambda x: x, **kwargs):
+    """
+    处理数据的函数
+    :param data: 要处理的数据列表
+    :param operation: 要应用到每个数据项的操作,默认是恒等函数
+    :param kwargs: 其他参数
+    :return: 处理后的数据列表
+    """
+    print(f"额外参数: {kwargs}")
+    return [operation(item) for item in data]
+
+# 使用默认操作
+result1 = process_data([1, 2, 3, 4, 5], message="使用默认操作")
+print(f"结果1: {result1}")
+
+# 使用自定义lambda函数
+result2 = process_data([1, 2, 3, 4, 5], operation=lambda x: x**2, message="平方操作")
+print(f"结果2: {result2}")
+
+# 使用*args和**kwargs
+def multi_operation(*args, **kwargs):
+    """展示*args和**kwargs的使用"""
+    print(f"位置参数: {args}")
+    print(f"关键字参数: {kwargs}")
+    return sum(args) if args else 0
+
+result3 = multi_operation(1, 2, 3, x=10, y=20)
+print(f"结果3: {result3}")
+
+# 输出:
+# 额外参数: {'message': '使用默认操作'}
+# 函数 process_data 运行时间: 0.00005 秒
+# 结果1: [1, 2, 3, 4, 5]
+# 额外参数: {'message': '平方操作'}
+# 函数 process_data 运行时间: 0.00004 秒
+# 结果2: [1, 4, 9, 16, 25]
+# 位置参数: (1, 2, 3)
+# 关键字参数: {'x': 10, 'y': 20}
+# 结果3: 6
+```
+
+这个综合示例展示了函数定义、默认参数、lambda函数、装饰器、*args和**kwargs的使用。通过这个例子,你可以看到这些概念是如何在实际编程中结合使用的。
 
 # 5.模块与包
 
@@ -645,9 +702,23 @@ print(f"The square root of 16 is: {result}")
 # 使用 math 模块中的常量
 pi_value = math.pi
 print(f"Value of pi: {pi_value}")
+
+# 使用 random 模块
+import random
+
+print(random.randint(1, 10))  # 输出: 1到10之间的随机整数
+print(random.choice(["苹果", "香蕉", "橙子"]))  # 随机选择列表中的一个元素
+
+# 使用 datetime 模块
+from datetime import datetime, timedelta
+
+now = datetime.now()
+print(f"现在的时间是: {now}")
+future = now + timedelta(days=7)
+print(f"一周后的时间是: {future}")
 ```
 
-在这个例子中，`math` 是 Python 的内置模块，它提供了常见的数学函数和常量。
+在这个例子中，`math` ，`random`，`datetime` 是 Python 的内置模块
 
 ## 3. **安装和使用第三方包**
 
@@ -757,6 +828,131 @@ print(mypackage.goodbye("Bob"))   # 输出: Goodbye, Bob!
 ```
 
 通过以上步骤，你可以创建一个包含多个模块的包，并通过 `__init__.py` 文件组织和简化模块的导入。这使得代码更加结构化和可维护。
+
+## 6. 综合示例
+
+让我们创建一个更复杂的包,用于处理学生信息，目录结构示例：
+
+```
+Copystudent_management/
+    __init__.py
+    database.py
+    student.py
+    utils.py
+```
+
+`__init__.py`:
+
+```
+# 从当前包的其他模块导入类和函数
+from .student import Student
+from .database import StudentDatabase
+from .utils import calculate_average_grade
+
+print("正在初始化学生管理系统...")  # 当包被导入时，这条消息会被打印
+```
+
+`student.py`:
+
+```
+class Student:
+    def __init__(self, name, age, grades):
+        self.name = name    # 学生姓名
+        self.age = age      # 学生年龄
+        self.grades = grades  # 学生成绩列表
+
+    def average_grade(self):
+        """计算学生的平均成绩"""
+        return sum(self.grades) / len(self.grades)
+
+    def __str__(self):
+        """返回学生信息的字符串表示"""
+        return f"学生: {self.name}, 年龄: {self.age}, 平均成绩: {self.average_grade():.2f}"
+```
+
+`database.py`:
+
+```
+class StudentDatabase:
+    def __init__(self):
+        self.students = []  # 用于存储学生对象的列表
+
+    def add_student(self, student):
+        """添加学生到数据库"""
+        self.students.append(student)
+
+    def get_student(self, name):
+        """通过姓名查找学生"""
+        for student in self.students:
+            if student.name == name:
+                return student
+        return None  # 如果没找到，返回 None
+
+    def all_students(self):
+        """返回所有学生的列表"""
+        return self.students
+```
+
+`utils.py`:
+
+```
+def calculate_average_grade(students):
+    """计算一组学生的平均成绩"""
+    if not students:
+        return 0  # 如果没有学生，返回0
+    total = sum(student.average_grade() for student in students)
+    return total / len(students)
+```
+
+使用这个包:
+
+```
+# 导入我们自定义包中的类和函数
+from student_management import Student, StudentDatabase, calculate_average_grade
+
+# 创建学生数据库实例
+db = StudentDatabase()
+
+# 添加学生到数据库
+# 每个学生有姓名、年龄和一个成绩列表
+db.add_student(Student("小明", 18, [85, 90, 88]))
+db.add_student(Student("小红", 19, [92, 95, 88]))
+db.add_student(Student("小张", 20, [78, 85, 90]))
+
+# 获取并打印所有学生信息
+print("所有学生信息:")
+for student in db.all_students():
+    print(student)  # 这里会调用 Student 类的 __str__ 方法
+
+# 计算所有学生的平均成绩
+# calculate_average_grade 函数接受一个学生列表，返回他们的总体平均成绩
+average = calculate_average_grade(db.all_students())
+print(f"\n所有学生的平均成绩: {average:.2f}")
+
+# 查找特定学生
+# get_student 方法通过姓名查找学生
+found_student = db.get_student("小红")
+if found_student:
+    print(f"\n找到学生: {found_student}")
+else:
+    print("\n未找到学生")
+    
+# 正在初始化学生管理系统...
+# 学生: 小明, 年龄: 18, 平均成绩: 87.67
+# 学生: 小红, 年龄: 19, 平均成绩: 91.67
+# 学生: 小张, 年龄: 20, 平均成绩: 84.33
+# 所有学生的平均成绩: 87.89
+# 找到学生: 学生: 小红, 年龄: 19, 平均成绩: 91.67    
+```
+
+让我们来解释一下这个输出:
+
+1. 首先,我们看到 "正在初始化学生管理系统..." 这条消息。这来自 `__init__.py` 文件,在我们导入包时就会执行。
+2. 接下来,我们看到三行学生信息,每行包含学生的姓名、年龄和平均成绩。这是通过遍历数据库中的所有学生并打印每个学生对象得到的。注意,平均成绩被四舍五入到小数点后两位。
+3. 然后,我们看到 "所有学生的平均成绩: 87.89"。这是通过 `calculate_average_grade` 函数计算得出的所有学生平均成绩的平均值。
+4. 最后,我们看到 "找到学生: 学生: 小红, 年龄: 19, 平均成绩: 91.67"。这表示我们成功地从数据库中检索到了名为 "小红" 的学生的信息。
+
+这个输出展示了我们的学生管理包的所有主要功能:初始化、添加学生、获取所有学生信息、计算总体平均成绩,以及查找特定学生。它展示了如何使用模块和包来组织相关的功能,使得代码更加结构化和可维护。
 
 ---
 
@@ -1074,207 +1270,223 @@ divide_numbers()
 
 # 7. 面向对象
 
-## 1. 类和对象的概念，定义类和实例化对象
+## 1. 理解类和对象的概念，学习使用 class 定义类
 
-类是对象的蓝图或模板，对象是类的实例。类定义了属性和方法，实例化类时会创建对象。
+在Python中，类(Class)是用于创建对象的蓝图或模板,而对象是类的实例。类定义了一组属性和方法，这些属性和方法描述了类的对象将具有的数据和行为。
 
 ```python
-# 定义一个简单的类
-class Person:
-    # 初始化方法，构造函数
+class Dog:
+    """一个简单的狗类"""
+    
     def __init__(self, name, age):
-        self.name = name  # 定义属性 name
-        self.age = age  # 定义属性 age
+        """初始化方法"""
+        self.name = name  # 实例变量
+        self.age = age
+    
+    def bark(self):
+        """狗叫方法"""
+        print(f"{self.name}说: 汪汪!")
 
-    # 定义方法
-    def greet(self):
-        return f"Hello, my name is {self.name} and I am {self.age} years old."
+# 创建Dog类的实例
+my_dog = Dog("旺财", 3)
+print(f"{my_dog.name}今年{my_dog.age}岁")  # 访问属性
+my_dog.bark()  # 调用方法
 
-# 实例化对象
-person1 = Person("Alice", 30)
-person2 = Person("Bob", 25)
-
-# 访问对象属性和方法
-print(person1.greet())  # 输出: Hello, my name is Alice and I am 30 years old.
-print(person2.greet())  # 输出: Hello, my name is Bob and I am 25 years old.
+# 输出:
+# 旺财今年3岁
+# 旺财说: 汪汪!
 ```
 
-解释：
+- 在这个例子中:
+  - `class Dog:` 定义了一个名为`Dog`的类。
+  - `__init__`是一个特殊方法,称为构造器,用于初始化新创建的对象。
+  - `self`参数表示对象本身,在方法定义中必须是第一个参数。
+  - `name`和`age`是实例变量,属于每个独立的对象。
+  - `bark()`是一个实例方法,定义了对象的行为。
 
-- `class Person`：定义了一个 `Person` 类。
-- `__init__()`：构造函数，用于初始化对象属性。
-- `self`：指向类的当前实例。
-- `person1 = Person("Alice", 30)`：创建 `Person` 类的实例，并传递参数。
-
-## 2. 封装、继承和多态
+## 2. 学习封装、继承和多态
 
 ### 2.1 封装
 
-封装是指将对象的属性和方法隐藏起来，只允许通过特定方法访问。
+封装是将数据和操作数据的方法绑定在一起，对数据的访问只能通过已定义的接口。Python使用双下划线前缀`__`来实现属性的私有化。
 
 ```python
-class Person:
-    def __init__(self, name, age):
-        self.__name = name  # 使用双下划线表示私有属性
-        self.__age = age
+class BankAccount:
+    def __init__(self, owner, balance=0):
+        self.owner = owner
+        self.__balance = balance  # 私有属性
+    
+    def deposit(self, amount):
+        if amount > 0:
+            self.__balance += amount
+            print(f"存款 ${amount} 成功。新余额是 ${self.__balance}")
+        else:
+            print("存款金额必须大于0")
+    
+    def withdraw(self, amount):
+        if 0 < amount <= self.__balance:
+            self.__balance -= amount
+            print(f"取款 ${amount} 成功。新余额是 ${self.__balance}")
+        else:
+            print("取款金额无效或余额不足")
+    
+    def get_balance(self):
+        return self.__balance
 
-    def get_name(self):
-        return self.__name
+account = BankAccount("Alice", 1000)
+account.deposit(500)
+account.withdraw(200)
+print(f"当前余额: ${account.get_balance()}")
+# print(account.__balance)  # 这会引发AttributeError
 
-    def set_name(self, name):
-        self.__name = name
-
-# 实例化
-person = Person("Alice", 30)
-print(person.get_name())  # 使用封装的方法访问私有属性
-
-# 修改属性值
-person.set_name("Bob")
-print(person.get_name())  # 修改后的名字为 Bob
+# 输出:
+# 存款 $500 成功。新余额是 $1500
+# 取款 $200 成功。新余额是 $1300
+# 当前余额: $1300
 ```
 
 ### 2.2 继承
 
-继承使得一个类可以继承另一个类的属性和方法。
-
-```python
-# 定义父类
-class Animal:
-    def speak(self):
-        return "Animal is making a sound."
-
-# 定义子类，继承父类
-class Dog(Animal):
-    def speak(self):
-        return "Dog barks."
-
-# 实例化对象
-dog = Dog()
-print(dog.speak())  # 输出: Dog barks.
-```
-
-### 2.3 多态
-
-多态意味着不同类的对象可以通过相同的接口调用不同的行为。
-
-```python
-def animal_speak(animal):
-    print(animal.speak())
-
-# 创建多个对象
-dog = Dog()
-animal = Animal()
-
-# 调用相同的方法
-animal_speak(dog)  # 输出: Dog barks.
-animal_speak(animal)  # 输出: Animal is making a sound.
-```
-
-## 3. `super()` 函数，方法重写和子类扩展
-
-`super()` 用于调用父类的方法，特别是在重写时扩展子类的功能。
+继承允许我们定义一个类,该类继承了另一个类的属性和方法。
 
 ```python
 class Animal:
     def __init__(self, name):
         self.name = name
-
+    
     def speak(self):
-        return f"{self.name} makes a sound."
+        pass
 
-# 子类继承并扩展
 class Dog(Animal):
-    def __init__(self, name, breed):
-        super().__init__(name)  # 调用父类的构造函数
-        self.breed = breed
-
     def speak(self):
-        # 调用父类的 speak 方法，并扩展
-        return f"{super().speak()} Also, {self.name} barks."
+        return f"{self.name}说: 汪汪!"
 
-# 实例化对象
-dog = Dog("Buddy", "Golden Retriever")
-print(dog.speak())  # 输出: Buddy makes a sound. Also, Buddy barks.
+class Cat(Animal):
+    def speak(self):
+        return f"{self.name}说: 喵喵!"
+
+dog = Dog("旺财")
+cat = Cat("咪咪")
+
+print(dog.speak())  # 输出: 旺财说: 汪汪!
+print(cat.speak())  # 输出: 咪咪说: 喵喵!
+```
+
+### 2.3 多态
+
+多态允许使用一个接口来操作不同类型的对象。
+
+```python
+def animal_sound(animal):
+    print(animal.speak())
+
+animal_sound(dog)  # 输出: 旺财说: 汪汪!
+animal_sound(cat)  # 输出: 咪咪说: 喵喵!
+```
+
+## 3. `super()` 函数，方法重写和子类扩展
+
+`super()`函数用于调用父类的方法。方法重写允许子类提供特定于自己的方法实现。
+
+```python
+class Vehicle:
+    def __init__(self, make, model):
+        self.make = make
+        self.model = model
+    
+    def info(self):
+        return f"{self.make} {self.model}"
+
+class Car(Vehicle):
+    def __init__(self, make, model, year):
+        super().__init__(make, model)  # 调用父类的__init__方法
+        self.year = year
+    
+    def info(self):  # 重写父类的info方法
+        return f"{super().info()} ({self.year})"  # 调用父类的info方法
+
+my_car = Car("Toyota", "Corolla", 2022)
+print(my_car.info())  # 输出: Toyota Corolla (2022)
 ```
 
 解释：
 
-- `super().__init__(name)`：调用父类的构造方法。
-- `super().speak()`：调用父类的 `speak` 方法，并扩展子类的行为。
+- `super().__init__(make, model)`：调用父类的构造方法。
+- `super().info()`：调用父类的 `info` 方法，并扩展子类的行为。
 
 ## 4. 多重继承和 MRO（方法解析顺序）
 
-多重继承允许一个类继承多个父类。MRO（方法解析顺序）用于决定在多重继承中调用哪个类的方法。
+Python支持多重继承,一个类可以继承多个父类。MRO定义了在多重继承中搜索方法的顺序。
 
 ```python
 class A:
-    def process(self):
-        print("Process in A")
+    def greet(self):
+        print("A的问候")
 
-class B(A):
-    def process(self):
-        print("Process in B")
+class B:
+    def greet(self):
+        print("B的问候")
 
-class C(A):
-    def process(self):
-        print("Process in C")
-
-# 多重继承
-class D(B, C):
+class C(A, B):
     pass
 
-# 实例化对象
+class D(B, A):
+    pass
+
+c = C()
 d = D()
-d.process()  # 输出: Process in B
 
-# 查看方法解析顺序
-print(D.mro())  # 输出方法解析顺序 [D, B, C, A, object]
+c.greet()  # 输出: A的问候
+d.greet()  # 输出: B的问候
+
+print(C.mro())  # 查看C的方法解析顺序
+print(D.mro())  # 查看D的方法解析顺序
 ```
-
-解释：
-
-- `class D(B, C)`：类 D 同时继承了 B 和 C。
-- `D.mro()`：显示了方法解析顺序，首先在 B 中查找方法，再在 C 中查找。
 
 ## 5. 抽象类和接口，使用 `abc` 模块
 
-抽象类不能实例化，它通常作为父类，规定子类必须实现的方法。可以通过 `abc` 模块实现抽象基类。
+抽象类是不能被实例化的类，通常用于定义接口。Python的`abc`模块提供了创建抽象基类的工具。
 
 ```python
 from abc import ABC, abstractmethod
 
-# 定义抽象类
 class Shape(ABC):
     @abstractmethod
     def area(self):
         pass
-
+    
     @abstractmethod
     def perimeter(self):
         pass
 
-# 定义具体子类
 class Rectangle(Shape):
     def __init__(self, width, height):
         self.width = width
         self.height = height
-
+    
     def area(self):
         return self.width * self.height
-
+    
     def perimeter(self):
         return 2 * (self.width + self.height)
 
-# 实例化具体类
-rect = Rectangle(10, 5)
-print(f"Area: {rect.area()}, Perimeter: {rect.perimeter()}")  # 输出面积和周长
+class Circle(Shape):
+    def __init__(self, radius):
+        self.radius = radius
+    
+    def area(self):
+        return 3.14 * self.radius ** 2
+    
+    def perimeter(self):
+        return 2 * 3.14 * self.radius
+
+# shape = Shape()  # 这会引发TypeError
+rect = Rectangle(5, 3)
+circle = Circle(2)
+
+print(f"矩形面积: {rect.area()}, 周长: {rect.perimeter()}")
+print(f"圆形面积: {circle.area():.2f}, 周长: {circle.perimeter():.2f}")
 ```
-
-解释：
-
-- `Shape(ABC)`：定义一个抽象类 `Shape`，继承自 `ABC`。
-- `@abstractmethod`：抽象方法，子类必须实现。
-- `Rectangle`：继承了抽象类 `Shape`，并实现了 `area` 和 `perimeter` 方法。
 
 ## 6. 综合示例
 
@@ -1283,46 +1495,91 @@ print(f"Area: {rect.area()}, Perimeter: {rect.perimeter()}")  # 输出面积和�
 ```python
 from abc import ABC, abstractmethod
 
-# 抽象基类
-class Shape(ABC):
+class Product(ABC):
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
+    
     @abstractmethod
-    def area(self):
+    def display_info(self):
         pass
 
+class Discount(ABC):
     @abstractmethod
-    def perimeter(self):
+    def apply_discount(self, price):
         pass
 
-# 定义父类 Circle
-class Circle(Shape):
-    def __init__(self, radius):
-        self.__radius = radius  # 封装半径为私有属性
+class PercentageDiscount(Discount):
+    def __init__(self, percentage):
+        self.percentage = percentage
+    
+    def apply_discount(self, price):
+        return price * (1 - self.percentage / 100)
 
-    def area(self):
-        return 3.14 * self.__radius ** 2
+class FixedDiscount(Discount):
+    def __init__(self, amount):
+        self.amount = amount
+    
+    def apply_discount(self, price):
+        return max(0, price - self.amount)
 
-    def perimeter(self):
-        return 2 * 3.14 * self.__radius
+class Book(Product):
+    def __init__(self, name, price, author):
+        super().__init__(name, price)
+        self.author = author
+    
+    def display_info(self):
+        return f"书名: {self.name}, 作者: {self.author}, 价格: ${self.price:.2f}"
 
-# 定义子类 Cylinder，继承 Circle
-class Cylinder(Circle):
-    def __init__(self, radius, height):
-        super().__init__(radius)  # 调用父类构造函数
-        self.height = height
+class Electronics(Product):
+    def __init__(self, name, price, brand):
+        super().__init__(name, price)
+        self.brand = brand
+    
+    def display_info(self):
+        return f"产品: {self.name}, 品牌: {self.brand}, 价格: ${self.price:.2f}"
 
-    # 重写 area 方法，计算圆柱体的表面积
-    def area(self):
-        return 2 * super().area() + self.perimeter() * self.height
+class ShoppingCart:
+    def __init__(self):
+        self.items = []
+    
+    def add_item(self, product, quantity=1):
+        self.items.append((product, quantity))
+    
+    def calculate_total(self, discount=None):
+        total = sum(product.price * quantity for product, quantity in self.items)
+        if discount:
+            total = discount.apply_discount(total)
+        return total
+    
+    def display_cart(self):
+        for product, quantity in self.items:
+            print(f"{product.display_info()} x {quantity}")
+        print(f"总价: ${self.calculate_total():.2f}")
 
-    def volume(self):
-        return super().area() * self.height
+# 使用示例
+book = Book("Python编程", 59.99, "张三")
+laptop = Electronics("笔记本电脑", 999.99, "联想")
 
-# 实例化对象
-cylinder = Cylinder(3, 5)
-print(f"Surface Area: {cylinder.area()}, Volume: {cylinder.volume()}")
+cart = ShoppingCart()
+cart.add_item(book, 2)
+cart.add_item(laptop)
+
+print("购物车内容:")
+cart.display_cart()
+
+percentage_discount = PercentageDiscount(10)
+fixed_discount = FixedDiscount(50)
+
+print(f"\n应用10%折扣后的总价: ${cart.calculate_total(percentage_discount):.2f}")
+print(f"应用固定$50折扣后的总价: ${cart.calculate_total(fixed_discount):.2f}")
+
+# 输出:
+# 购物车内容:
+# 书名: Python编程, 作者: 张三, 价格: $59.99 x 2
+# 产品: 笔记本电脑, 品牌: 联想, 价格: $999.99 x 1
+# 总价: $1119.97
+#
+# 应用10%折扣后的总价: $1007.97
+# 应用固定$50折扣后的总价: $1069.97
 ```
-
-解释：
-
-- `Circle` 类封装了半径属性并实现了 `Shape` 的抽象方法。
-- `Cylinder` 类继承了 `Circle` 并扩展了 `volume` 方法，同时重写了 `area` 方法。 
